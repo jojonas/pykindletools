@@ -18,7 +18,7 @@ def gather_selfposts(username, subreddit, count=5):
 		book.write(file)
 	
 if __name__=="__main__":
-	if len(sys.argv) < 2:
-		print "Usage: %s <username>" % sys.argv[0]
+	if len(sys.argv) < 3:
+		print "Usage: %s <username> <subreddit>" % sys.argv[0]
 	else:
-		gather_selfposts(sys.argv[1], "talesfromtechsupport", 5)
+		gather_selfposts(sys.argv[1], sys.argv[2], 50)
