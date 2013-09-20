@@ -163,6 +163,8 @@ class MobiHeader(container.SerializedContainer):
 		assert len(data)+16 == titleOffset
 		data += nameData
 		
+		while len(data) % 4 > 0:
+			data += b'\0'
 		
 		return data
 		
