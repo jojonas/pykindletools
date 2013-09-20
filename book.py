@@ -80,7 +80,8 @@ class Book:
 		
 		book.records.append(record0)
 		for record in textRecords:
-			book.records.append(record)			
+			book.records.append(record)	
+			
 		record0.mobi.last_content_record = len(book.records)-1
 		record0.mobi.first_non_book_record = len(book.records)
 		
@@ -97,7 +98,7 @@ class Book:
 		
 		for counter, record in enumerate(book.records):
 			record.id = counter
-		
+			
 		# finish
 		book.finish()
 		stream.write(book.data())
@@ -113,9 +114,11 @@ if __name__=="__main__":
 	book.author = "Max Mustermann"
 	book.publisher = "My Verlag"
 	
+	import re
 	with open("loremipsum.txt", "r") as input:
-		for line in input:
-			book.addText(line + "\r\n")
-	
+		data = input.read()
+		clean = re.sub(">\s*<","><", data)
+		book.addText(clean)
+		
 	with open("lorem.mobi", "wb") as file:
 		book.write(file)
