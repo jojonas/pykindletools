@@ -24,10 +24,13 @@ class RedditSubredditBook(RedditBook):
 		self.addHtml("<sup>(compiled by /u/%s on %s)</sup>" % (self.username, nowStr))
 		submissions = self.reddit.get_subreddit(self.subreddit).get_hot(limit=self.count)
 		for submission in submissions:
-			self.addHtml("<hr />")
+			self.addPagebreak()
 			self.addHeading(submission.title, 2)
 			self.addHtml("<sup>(score: %d, submitted by /u/%s)</sup>" % (submission.score, submission.author.name))
 			if submission.is_self:
-				self.addHtml(submission.selftext_html)
+				if submission.selftext_html is not None:
+					html = self.htmlParser.unescape(submission.selftext_html)
+					html = html.replace(" class=\"md\"", "")
+					self.addHtml(html)
 			else:
-				self.addHtml("<a href=\"%s\">Link</a>" % submission.url)
+				self.addParagraph("<a href=\"%s\">%s</a>" % (submission.url, submission.url), indent=True)

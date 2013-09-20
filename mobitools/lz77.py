@@ -59,12 +59,12 @@ def lz77_compress(data):
 		
 	return output
 	
-def lz77_decompress(stream, maxOut=4096):
+def lz77_decompress(stream, maxOut=None):
 	if isinstance(stream, str):
 		stream = io.BytesIO(stream)
 		
 	output = ""
-	while len(output) < maxOut:
+	while maxOut is None or len(output) < maxOut:
 		raw = stream.read(1)
 		if len(raw) == 0:
 			break # EOF
@@ -80,8 +80,14 @@ def lz77_decompress(stream, maxOut=4096):
 			length = (pair   & 0b0000000000000111)
 			length += 3
 			toAppend = ''
-			for pos in xrange(min(length, maxOut-len(output))):
-				toAppend += output[-distance+pos]
+			
+			if maxOut is None:
+				for pos in xrange(length):
+					toAppend += output[-distance+pos]
+			else:
+				for pos in xrange(min(length, maxOut-len(output))):
+					toAppend += output[-distance+pos]
+					
 			output += toAppend
 		elif 0xc0 <= char <= 0xff:
 			output += ' '

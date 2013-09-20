@@ -66,8 +66,16 @@ class Book:
 		
 		record0.mobi.name = self.title
 		
-		record0.mobi.exth.records.append(mobi.ExthRecord(EXTH_RECORD_TYPE_AUTHOR, self.author))
-		record0.mobi.exth.records.append(mobi.ExthRecord(EXTH_RECORD_TYPE_PUBLISHER, self.publisher))
+		if len(self.author) > 0:
+			record0.mobi.exth.records.append(mobi.ExthRecord(EXTH_RECORD_TYPE_AUTHOR, self.author))
+		
+		if len(self.publisher) > 0:
+			record0.mobi.exth.records.append(mobi.ExthRecord(EXTH_RECORD_TYPE_PUBLISHER, self.publisher))
+		
+		record0.mobi.exth.records.append(mobi.ExthRecord(EXTH_RECORD_TYPE_CREATOR_SOFTWARE, EXTH_CREATOR_KINDLEGEN_WINDOWS))
+		record0.mobi.exth.records.append(mobi.ExthRecord(EXTH_RECORD_TYPE_CREATOR_VERSION_MAJOR, 2))
+		record0.mobi.exth.records.append(mobi.ExthRecord(EXTH_RECORD_TYPE_CREATOR_VERSION_MINOR, 9))
+		record0.mobi.exth.records.append(mobi.ExthRecord(EXTH_RECORD_TYPE_CREATOR_VERSION_BUILD, 0))
 		
 		return record0
 		
@@ -105,5 +113,5 @@ class Book:
 		
 	def addText(self, text):
 		self.text_length += len(text)
-		self.textBuffer.write(text.encode("utf-8"))
+		self.textBuffer.write(text.encode('utf-8'))
 		

@@ -194,6 +194,8 @@ class ExthRecord(container.SerializedContainer):
 	def __init__(self, type, data):
 		container.SerializedContainer.__init__(self)
 		self.type = type
+		if isinstance(data, int):
+			data = struct.pack(b'>I', data)
 		self.raw = data
 		
 	def serialize(self):

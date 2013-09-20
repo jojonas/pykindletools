@@ -16,6 +16,9 @@ def gather_posts(username, subreddit, count=5):
 	
 	with open("%s.mobi" % subreddit, "wb") as file:
 		book.write(file)
+		
+	with open("%s.html" % subreddit, "w") as file:
+		file.write(html.encode("utf-8"))
 	
 if __name__=="__main__":
 	if len(sys.argv) < 3:
