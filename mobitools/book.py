@@ -105,5 +105,5 @@ class Book:
 		
 	def addText(self, text):
 		self.text_length += len(text)
-		self.textBuffer.write(text)
+		self.textBuffer.write(text.encode("utf-8"))
 		

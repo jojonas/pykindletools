@@ -60,8 +60,6 @@ class CompressedTrailingRecord(PDBRecord):
 		assert len(self.overlap) <= 3
 		data += self.overlap
 		data += util.variable_width_int_backwards(len(self.overlap))
-		while len(data) % 4 != 0:
-			data += b'\0'
 		return data
 		
 class PalmDocRecord(PDBRecord):
