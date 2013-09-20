@@ -20,7 +20,7 @@ class HTMLBook:
 		self.addHtml("<p>%s</p>" % text)
 		
 	def addHtml(self, html):
-		data = xml.dom.minidom.parseString(self.htmlParser.unescape(html))
+		data = xml.dom.minidom.parseString(self.htmlParser.unescape(html).encode('utf-8'))
 		self.body.appendChild(data.documentElement)
 		
 	def toHtml(self):
