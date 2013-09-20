@@ -11,7 +11,7 @@ class RedditBook(util.HTMLBook):
 		raise NotImplementedError("create() function not implemented.")
 		
 		
-class RedditSelfSubredditBook(RedditBook):
+class RedditSubredditBook(RedditBook):
 	def __init__(self, username, subreddit, count=5):
 		RedditBook.__init__(self, username)
 		self.subreddit = subreddit
@@ -27,4 +27,7 @@ class RedditSelfSubredditBook(RedditBook):
 			self.addHtml("<hr />")
 			self.addHeading(submission.title, 2)
 			self.addHtml("<sup>(score: %d, submitted by /u/%s)</sup>" % (submission.score, submission.author.name))
-			self.addHtml(submission.selftext_html)
+			if submission.is_self:
+				self.addHtml(submission.selftext_html)
+			else:
+				self.addHtml("<a href=\"%s\">Link</a>" % submission.url)

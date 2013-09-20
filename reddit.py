@@ -1,10 +1,10 @@
 from mobitools import Book
-from webapis.reddit import RedditSelfSubredditBook
+from webapis.reddit import RedditSubredditBook
 
 import sys
 
-def gather_selfposts(username, subreddit, count=5):
-	rssb = RedditSelfSubredditBook(username, subreddit, count)
+def gather_posts(username, subreddit, count=5):
+	rssb = RedditSubredditBook(username, subreddit, count)
 	rssb.gather()
 	
 	book = Book()
@@ -21,4 +21,4 @@ if __name__=="__main__":
 	if len(sys.argv) < 3:
 		print "Usage: %s <username> <subreddit>" % sys.argv[0]
 	else:
-		gather_selfposts(sys.argv[1], sys.argv[2], 50)
+		gather_posts(sys.argv[1], sys.argv[2], 50)
