@@ -1,1 +1,1 @@
-from mobi import Book
+from mobitools.book import Book
