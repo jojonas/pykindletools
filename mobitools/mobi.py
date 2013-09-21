@@ -96,7 +96,7 @@ class MobiHeader(container.SerializedContainer):
 		
 		self.type = constants.MOBI_TYPE_BOOK
 		self.id = random.randint(0, 0xFFFFFFFF)
-		self.version = 2
+		self.version = 8
 		self.exth = ExthHeader()
 		self.min_version = self.version
 		self.first_content_record = 1
@@ -199,7 +199,7 @@ class ExthRecord(container.SerializedContainer):
 		self.raw = data
 		
 	def serialize(self):
-		data = ""
+		data = ''
 		data += struct.pack(b'>I', self.type)
 		data += struct.pack(b'>I', len(self.raw)+8)
 		data += self.raw

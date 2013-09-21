@@ -1,7 +1,7 @@
 import io
-
-def lz77_compress(data):
-	output = ""
+	
+def lz77_compress(data, compress8=True):
+	output = io.BytesIO()
 	
 	position = 0
 	space = False
@@ -20,23 +20,23 @@ def lz77_compress(data):
 			if result == -1:
 				break
 			last_good_start = result
-			overlap_length = i-1
+			overlap_length = i
 			
 		if overlap_length >= 3:
 			overlap_distance = position - last_good_start
 			byte = (overlap_distance << 3) | (overlap_length-3)
 			if space:
-				output += ' '
+				output.write(' ')
 				space = False
-			output += chr(0x80 | (byte >> 8))
-			output += chr(byte & 0xff)
+			output.write(chr(0x80 | (byte >> 8)))
+			output.write(chr(byte & 0xff))
 			position += overlap_length
 		else:
 			char = ord(data[position])
 			position += 1
 			
 			if space and 0xc0 <= (char^0x80) <= 0xff:
-				output += chr(char ^ 0x80)
+				output.write(chr(char ^ 0x80))
 				space = False
 				
 			elif not space and char == 32:
@@ -44,21 +44,50 @@ def lz77_compress(data):
 				
 			else:
 				if space:
-					output += ' '
+					output.write(' ')
 					space = False
 					
 				if char == 0 or 0x09 <= char <= 0x7f:
-					output += chr(char)
+					output.write(chr(char))
 				else:
-					output += chr(1)
-					output += chr(char)
-				
+					output.write(chr(1))
+					output.write(chr(char))
 				
 	if space:
-		output += ' '
+		output.write(' ')
 		
-	return output
-	
+	if compress8:
+		MAX_ACC = 8
+		
+		clean = io.BytesIO()
+		output.seek(0,2)
+		end = output.tell()
+		output.seek(0)
+		accumulator = b''
+		while output.tell() < end:
+			char = ord(output.read(1))
+			if 0x01 <= char <= MAX_ACC: 
+				accumulator += output.read(char)
+				while len(accumulator) > MAX_ACC:
+					clean.write(chr(MAX_ACC))
+					clean.write(accumulator[:MAX_ACC])
+					accumulator = accumulator[MAX_ACC:]
+			else:
+				if len(accumulator) > 0:
+					assert len(accumulator) <= MAX_ACC
+					clean.write(chr(len(accumulator)))
+					clean.write(accumulator)
+					accumulator = b''
+					
+				clean.write(chr(char))
+				
+				if 0x80 <= char <= 0xbf:
+					clean.write(output.read(1))
+			
+		return clean.getvalue()
+	else:
+		return output.getvalue()
+		
 def lz77_decompress(stream, maxOut=None):
 	if isinstance(stream, str):
 		stream = io.BytesIO(stream)

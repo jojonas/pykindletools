@@ -33,4 +33,4 @@ class RedditSubredditBook(RedditBook):
 					html = html.replace(" class=\"md\"", "")
 					self.addHtml(html)
 			else:
-				self.addParagraph("<a href=\"%s\">%s</a>" % (submission.url, submission.url), indent=True)
+				self.addParagraph("<a href=\"%s\">%s</a>" % (submission.url, submission.url), indent="10px")
