@@ -7,6 +7,6 @@ def call_kindlegen(fname):
 		subprocess.call(["kindlegen.exe", fname], stdout=FNULL, stderr=subprocess.STDOUT)
 	
 def make_filename(title):
-	title = title.replace(' ', '_')[:32]
+	title = title.strip().lower().replace(' ', '_')[:32]
 	fname = re.sub(r'[^a-zA-Z0-9_]', '', title)
 	return fname

@@ -23,6 +23,17 @@ class HTMLFile(File):
 		self.document.appendChild(self.html)
 		self.html.appendChild(self.head)
 		self.html.appendChild(self.body)
+		
+		titleTag = self.document.createElement('title')
+		titleTagText = self.document.createTextNode(title)
+		titleTag.appendChild(titleTagText)
+		self.head.appendChild(titleTag)
+		
+		metaEncoding = self.document.createElement('meta')
+		metaEncoding.setAttribute('http-equiv', 'content-type')
+		metaEncoding.setAttribute('content', 'text/html; charset=utf-8')
+		self.head.appendChild(metaEncoding)
+		
 		self.htmlParser = HTMLParser.HTMLParser()
 		
 	def content(self):
@@ -35,7 +46,7 @@ class HTMLFile(File):
 		return self.htmlParser.unescape(txt)
 	
 	def addHtml(self, html):
-		data = xml.dom.minidom.parseString(html.encode('utf-8'))
+		data = xml.dom.minidom.parseString(html.encode("utf-8"))
 		imported = self.document.importNode(data.documentElement, True)
 		self.body.appendChild(imported)
 		
@@ -47,7 +58,7 @@ class HTMLFile(File):
 		walkTree(self.document.documentElement, rmAttribs)
 		
 	def toHtml(self):
-		return self.document.toxml()[self._declLength:]
+		return self.document.toxml("utf-8")[self._declLength:].decode("utf-8")
 		
 	def exportHtml(self):
 		self.removeAttributes()
@@ -62,7 +73,8 @@ class HTMLFile(File):
 		allowed_selfclose += ["basefont", "bgsound", "frame", "isindex"]
 		allowed_selfclose += ["mbp:pagebreak"]
 		for tag in allowed_selfclose:
-			html = html.replace("<%s></%s>" % (tag,tag), "<%s/>" % tag)
+			html = html.replace(u"<{tag}></{tag}>".format(tag=tag), u"<{tag}/>".format(tag=tag))
+			
 		return html
 
 		

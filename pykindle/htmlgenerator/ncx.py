@@ -1,7 +1,7 @@
 from filebase import File
 
 NCX_TEMPLATE = \
-'''<?xml version='1.0' encoding='utf-8'?>
+u'''<?xml version='1.0' encoding='utf-8'?>
 <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en">
 	<docTitle>
 		<text>{title}</text>
@@ -10,7 +10,7 @@ NCX_TEMPLATE = \
 </ncx>'''
 
 NCX_NAVPOINTS_TEMPLATE = \
-'''<navPoint id="np_{counter}" playOrder="{counter}">
+u'''<navPoint id="np_{counter}" playOrder="{counter}">
 	<navLabel>
 		<text>{title}</text>
 	</navLabel>
@@ -51,7 +51,7 @@ class NCXFile(File):
 		if level <= 0:
 			raise IndexError("TOC level must be greater than 0.")
 		elif level > self.lastTocEntry.level + 1:
-			raise IndexError("TOC entry of level %d cannot follow a TOC entry of level %d." % (newEntry.level, self.lastTocEntry.level))
+			raise IndexError("TOC entry of level %d cannot follow a TOC entry of level %d." % (level, self.lastTocEntry.level))
 			
 		newEntry = TocEntry(title, htmlfname, aname, level)		
 	

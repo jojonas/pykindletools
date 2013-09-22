@@ -3,6 +3,7 @@ from util import make_filename
 import os
 import tempfile
 from contextlib import contextmanager
+import codecs
 
 class File:
 	def __init__(self, title, ext='txt'):
@@ -15,8 +16,8 @@ class File:
 		return ''
 		
 	def write(self):
-		with open(self.filename, 'wb') as file:
-			file.write(self.content().encode('utf-8'))
+		with codecs.open(self.filename, "wb", "utf-8") as file:
+			file.write(self.content())
 
 	def delete(self):
 		os.remove(self.filename)
@@ -28,4 +29,5 @@ class File:
 			yield 
 		finally:
 			self.delete()
+			
 		

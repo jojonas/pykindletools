@@ -1,7 +1,7 @@
 from filebase import File
 
 OPF_TEMPLATE = \
-'''<?xml version="1.0" encoding="utf-8"?>
+u'''<?xml version="1.0" encoding="utf-8"?>
 <package version="2.0" xmlns="http://www.idpf.org/2007/opf" unique-identifier="uid">
 	<metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
 		{metatags}
@@ -28,13 +28,13 @@ class OPFFile(File):
 		self.ncx = None
 		self.metaInfos = {}
 		
-		self.addMetadata("title", title)
-		self.addMetadata("language", "en")
+		self.setMetadata("title", title)
+		self.setMetadata("language", "en")
 		
 	def content(self):
 		return self.toXml()
 	
-	def addMetadata(self, key, value):
+	def setMetadata(self, key, value):
 		self.metaInfos[key] = value
 		
 	def setHtml(self, html):
@@ -46,5 +46,5 @@ class OPFFile(File):
 	def toXml(self):
 		metatags = ''
 		for key, value in self.metaInfos.iteritems():
-			metatags += '<dc:{key}>{value}</dc:{key}>\n'.format(key=key, value=value)
+			metatags += u'<dc:{key}>{value}</dc:{key}>\n'.format(key=key, value=value)
 		return OPF_TEMPLATE.format(htmlname=self.html.filename, ncxname=self.ncx.filename, title=self.title, metatags=metatags)
