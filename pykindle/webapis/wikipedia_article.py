@@ -3,13 +3,18 @@ from pykindle.htmlgenerator import Book
 import wikipedia
 
 class WikipediaArticleBook(Book):
-	def __init__(self, title):
+	"""Create a MOBI file from a Wikipedia article.
+	
+	Arguments:
+	:param title: Search term for Wikipedia
+	:param lang: Wikipedia language
+	"""
+	def __init__(self, title, lang="en"):
 		Book.__init__(self, u"Wikipedia: {title}".format(title=title))
-		self.search_term = title
-		self.page = None
+		wikipedia.set_lang(lang)
+		self.page = wikipedia.page(title)
 		
 	def gather(self):
-		self.page = wikipedia.page(self.search_term)
 		self.addHeading(self.page.title)
 		
 		content = self.page.content
@@ -23,7 +28,5 @@ class WikipediaArticleBook(Book):
 				self.addHeading(title, level)
 			else:
 				self.addParagraph(line)
-			
-	def setLanguage(self, lang):
-		wikipedia.set_lang(lang)
+				
 		

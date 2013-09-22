@@ -9,17 +9,27 @@ IMGUR_HOST = 'i.imgur.com'
 REDDIT_LOGO = "http://www.redditstatic.com/about/assets/reddit-alien.svg"
 
 class RedditSubredditBook(Book):
-	def __init__(self, username, subreddit, count=5, commentcount=5):
+	"""Create a MOBI file from a subreddit.
+	
+	Arguments:
+	:param subreddit: the subreddit that will be fetched
+	:param username: your reddit username (for the crawler user agent, see documentation of reddit API)
+	:param posts: number of posts that shall be fetched 
+	:type int
+	:param comments: number of comments that shall be fetched per post
+	:type int
+	"""
+	def __init__(self, subreddit, username, posts=5, comments=5):
 		Book.__init__(self, "Reddit: /r/{sr}".format(sr=subreddit))
 		self.reddit = praw.Reddit(user_agent="MOBI downloader by %s" % username)
 		
 		self.subreddit = subreddit
-		self.count = count
-		self.commentcount = commentcount
+		self.count = posts
+		self.commentcount = comments
 		self.username = username
 		
-		assert count > 0
-		assert commentcount >= 0
+		assert posts > 0
+		assert comments >= 0
 		
 	def gather(self):
 		self.addHeading(self.subreddit)

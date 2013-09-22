@@ -5,6 +5,13 @@ import re
 from datetime import datetime
 
 class WordpressBook(Book):
+	"""Create a MOBI file from a wordpress blog.
+	
+	Arguments:
+	:param url: the XML-RPC url of the blog
+	:param username: login username of the blog
+	:param password: login password of the blog
+	"""
 	def __init__(self, url, username, password):
 		self.username = username
 		self.password = password

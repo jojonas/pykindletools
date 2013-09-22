@@ -5,6 +5,11 @@ import xml.etree.ElementTree
 from datetime import datetime
 
 class RSSBook(Book):
+	"""Create a MOBI file from a RSS 2.0 feed.
+	
+	Arguments:
+	:param url: the url of the RSS feed
+	"""
 	def __init__(self, url):
 		data = urllib2.urlopen(url).read()
 		self.etree = xml.etree.ElementTree.fromstring(data).find("./channel")
