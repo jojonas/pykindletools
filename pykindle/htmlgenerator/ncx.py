@@ -1,8 +1,9 @@
-from filebase import File
+from pykindle.htmlgenerator.filebase import File
 
 NCX_TEMPLATE = \
 u'''<?xml version='1.0' encoding='utf-8'?>
-<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en">
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" 
+	version="2005-1" xml:lang="en">
 	<docTitle>
 		<text>{title}</text>
 	</docTitle>
@@ -18,7 +19,7 @@ u'''<navPoint id="np_{counter}" playOrder="{counter}">
 	{childvals}
 </navPoint>'''
 
-class TocEntry:
+class TocEntry(object):
 	def __init__(self, title, htmlfname, aname, level):
 		self.title = title
 		self.aname = aname
@@ -33,7 +34,13 @@ class TocEntry:
 		for child in self.children:
 			xml, counter = child.toXml(counter)
 			childVals += xml
-		xml = NCX_NAVPOINTS_TEMPLATE.format(htmlfile=self.htmlfname, aname=self.aname, title=self.title, counter=counter, childvals=childVals)
+		xml = NCX_NAVPOINTS_TEMPLATE.format(
+			htmlfile=self.htmlfname, 
+			aname=self.aname, 
+			title=self.title, 
+			counter=counter, 
+			childvals=childVals
+		)
 		counter += 1
 		return xml, counter
 
@@ -51,7 +58,10 @@ class NCXFile(File):
 		if level <= 0:
 			raise IndexError("TOC level must be greater than 0.")
 		elif level > self.lastTocEntry.level + 1:
-			raise IndexError("TOC entry of level %d cannot follow a TOC entry of level %d." % (level, self.lastTocEntry.level))
+			raise IndexError(
+				"TOC entry of level %d cannot follow a TOC entry of level %d." % 
+				(level, self.lastTocEntry.level)
+			)
 			
 		newEntry = TocEntry(title, htmlfname, aname, level)		
 	

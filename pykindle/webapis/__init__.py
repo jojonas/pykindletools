@@ -1,4 +1,4 @@
-import reddit
+import pykindle.webapis.reddit
 import wikipedia_article as wikipedia
-import rss
-import wordpress
+import pykindle.webapis.rss
+import pykindle.webapis.wordpress

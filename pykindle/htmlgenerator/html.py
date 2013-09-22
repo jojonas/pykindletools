@@ -1,4 +1,4 @@
-from filebase import File
+from pykindle.htmlgenerator.filebase import File
 
 import xml.dom.minidom
 import re
@@ -64,16 +64,28 @@ class HTMLFile(File):
 		self.removeAttributes()
 		html = self.toHtml()
 		
-		html = re.sub(r'>\s*<',r'><', html) 				# remove whitespace
-		html = re.sub(r'[\t\n\r\f\v]',r' ', html) 			# remove all whitespace that is not a space
-		html = re.sub(r'<([^/>]+)/>', r'<\1></\1>', html) 	# remove self closing
+		# remove whitespace
+		html = re.sub(r'>\s*<', r'><', html)
+		
+		# remove all whitespace that is not a space
+		html = re.sub(r'[\t\n\r\f\v]', r' ', html)
+		 
+		# remove self closing
+		html = re.sub(r'<([^/>]+)/>', r'<\1></\1>', html)
 		
 		# http://stackoverflow.com/questions/97522/what-are-all-the-valid-self-closing-elements-in-xhtml-as-implemented-by-the-maj
-		allowed_selfclose = ["area", "base", "br", "col", "embed", "hr", "img", "input", "keygen", "link", "menuitem", "meta", "param", "source", "track", "wbr"]
+		allowed_selfclose = \
+			["area", "base", "br", "col", "embed", "hr", "img", "input", 
+			"keygen", "link", "menuitem", "meta", "param", "source", "track", 
+			"wbr"]
+			
 		allowed_selfclose += ["basefont", "bgsound", "frame", "isindex"]
 		allowed_selfclose += ["mbp:pagebreak"]
 		for tag in allowed_selfclose:
-			html = html.replace(u"<{tag}></{tag}>".format(tag=tag), u"<{tag}/>".format(tag=tag))
+			html = html.replace( 
+				u"<{tag}></{tag}>".format(tag=tag), 
+				u"<{tag}/>".format(tag=tag)
+			)
 			
 		return html
 

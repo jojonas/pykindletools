@@ -6,6 +6,7 @@ class WikipediaArticleBook(Book):
 	def __init__(self, title):
 		Book.__init__(self, u"Wikipedia: {title}".format(title=title))
 		self.search_term = title
+		self.page = None
 		
 	def gather(self):
 		self.page = wikipedia.page(self.search_term)

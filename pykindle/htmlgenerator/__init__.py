@@ -1,1 +1,1 @@
-from book import Book
+from pykindle.htmlgenerator.book import Book

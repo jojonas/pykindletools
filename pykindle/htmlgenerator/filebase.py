@@ -1,23 +1,24 @@
-from util import make_filename
+from pykindle.htmlgenerator.util import make_filename
 
 import os
-import tempfile
 from contextlib import contextmanager
 import codecs
 
-class File:
+class File(object):
 	def __init__(self, title, ext='txt'):
 		self.title = title
 		self.extension = ext
-		self.filename = "{title}.{ext}".format(title=make_filename(title), ext=ext)
+		self.filename = "{title}.{ext}".format(
+			title=make_filename(title), 
+			ext=ext
+		)
 		
 	def content(self):
 		raise NotImplementedError("content() missing.")
-		return ''
 		
 	def write(self):
-		with codecs.open(self.filename, "wb", "utf-8") as file:
-			file.write(self.content())
+		with codecs.open(self.filename, "wb", "utf-8") as outfile:
+			outfile.write(self.content())
 
 	def delete(self):
 		os.remove(self.filename)

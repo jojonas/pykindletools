@@ -1,6 +1,5 @@
 from pykindle.htmlgenerator import Book
 
-import urllib2
 import xmlrpclib
 import re
 from datetime import datetime
@@ -25,7 +24,13 @@ class WordpressBook(Book):
 		authorsCache = {}
 		for post in posts:
 			if not post['post_author'] in authorsCache:
-				authorsCache[post['post_author'] ] = self.server.getUser(self.blog_id, self.username, self.password, post['post_author'] )
+				authorsCache[post['post_author'] ] = self.server.getUser(
+					self.blog_id, 
+					self.username, 
+					self.password, 
+					post['post_author'] 
+				)
+				
 			username = authorsCache[post['post_author'] ]['username']
 		
 			content = post['post_content']

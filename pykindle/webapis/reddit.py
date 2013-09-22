@@ -24,15 +24,27 @@ class RedditSubredditBook(Book):
 	def gather(self):
 		self.addHeading(self.subreddit)
 		
-		nowStr = datetime.now().strftime("%B %d, %Y, %H:%M")
-		self.addAuthoringInfo(author=self.username, date=datetime.now(), verb="compiled")
+		self.addAuthoringInfo(
+			author=self.username, 
+			date=datetime.now(), 
+			verb="compiled"
+		)
 		self.addImage(REDDIT_LOGO, width=0.5)
 		
-		submissions = self.reddit.get_subreddit(self.subreddit).get_hot(limit=self.count)
-		for i, submission in enumerate(submissions):
+		submissions = \
+			self.reddit.get_subreddit(self.subreddit).get_hot(limit=self.count)
+			
+		for submission in submissions:
 			self.addPagebreak()
 			self.addHeading(submission.title, 2)
-			self.addAuthoringInfo(author="{author} ({score})".format(author=submission.author.name, score=submission.score), date=datetime.fromtimestamp(submission.created), verb="submitted")
+			self.addAuthoringInfo(
+				author="{author} ({score})".format(
+					author=submission.author.name, 
+					score=submission.score
+				), 
+				date=datetime.fromtimestamp(submission.created), 
+				verb="submitted"
+			)
 			
 			if submission.is_self:
 				if submission.selftext_html is not None:
@@ -43,13 +55,24 @@ class RedditSubredditBook(Book):
 				if url.netloc == IMGUR_HOST and url.path.lower().endswith('jpg'):
 					self.addImage(submission.url)
 				else:
-					self.html.addHtml(r'<p><a href="{url}">{url}</a></p>'.format(url=self.html.escape(submission.url)))
+					self.html.addHtml(r'<p><a href="{url}">{url}</a></p>' \
+						.format(url=self.html.escape(submission.url)))
 
 			if self.commentcount > 0:
 				self.addHeading("Comments", 3)
 				for comment in submission.comments[:self.commentcount]:
 					if not isinstance(comment, praw.objects.MoreComments):
-						self.html.addHtml(r'<blockquote>{body}<footer>- {user} ({score})</footer></blockquote>'.format(user=self.html.escape(comment.author.name), score=comment.score, body=comment.body))
+						html = r'''<blockquote>
+						{body}
+						<footer>
+							- {user} ({score})
+						</footer>
+						</blockquote>'''.format(
+							user=self.html.escape(comment.author.name), 
+							score=comment.score, 
+							body=comment.body
+						)
+						self.html.addHtml(html)
 					
 					
 				
