@@ -2,9 +2,9 @@ import re
 import subprocess
 import os
 
-def call_kindlegen(fname):
+def call_kindlegen(kindlegen, fname):
 	with open(os.devnull, "w") as FNULL:
-		subprocess.call(["kindlegen.exe", fname], stdout=FNULL, stderr=subprocess.STDOUT)
+		subprocess.call([kindlegen, fname], stdout=FNULL, stderr=subprocess.STDOUT)
 	
 def make_filename(title):
 	title = title.strip().lower().replace(' ', '_')[:32]

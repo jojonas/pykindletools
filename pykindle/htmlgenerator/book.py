@@ -2,10 +2,10 @@ from html import HTMLFile
 from ncx import NCXFile
 from opf import OPFFile
 
-from contextlib import contextmanager
 from util import call_kindlegen
 
 import collections
+from contextlib import contextmanager
 import os, os.path
 import urllib
 
@@ -22,6 +22,10 @@ class Book:
 		self.counters = collections.defaultdict(int)
 		
 		self.images = {}
+		self.kindlegen = 'kindlegen.exe'
+		
+	def setKindlegen(self, kindlegen):
+		self.kindlegen = kindlegen
 		
 	def generateId(self, category='object'):
 		self.counters[category] += 1
@@ -42,6 +46,16 @@ class Book:
 			style = ' style="text-indent: {indent}"'.format(indent=indent)
 			
 		self.html.addHtml(u'<p{style}>{content}</p>'.format(style=style, content=self.html.escape(text)))
+		
+	def addAuthoringInfo(self, author='', date=None, verb="published"):
+		info = verb
+		if len(author) > 0:
+			info += " by {author}".format(author=author)
+		if date is not None:
+			dateStr = date.strftime("%x, %X")
+			info += " on {date}".format(date=dateStr)
+		self.html.addHtml("<small>{info}</small>".format(info=self.html.escape(info)))
+		self.html.addHtml("<br/>")
 		
 	def addImage(self, src, width=0.95, center=True):
 		_, ext = os.path.splitext(src)
@@ -76,6 +90,6 @@ class Book:
 			with self.html.tempObject():
 				with self.ncx.tempObject():
 					with self.opf.tempObject():
-						call_kindlegen(self.opf.filename)
+						call_kindlegen(self.kindlegen, self.opf.filename)
 					
 			

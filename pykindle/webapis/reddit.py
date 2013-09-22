@@ -9,27 +9,30 @@ IMGUR_HOST = 'i.imgur.com'
 REDDIT_LOGO = "http://www.redditstatic.com/about/assets/reddit-alien.svg"
 
 class RedditSubredditBook(Book):
-	def __init__(self, username, subreddit, count=5):
+	def __init__(self, username, subreddit, count=5, commentcount=5):
 		Book.__init__(self, "Reddit: /r/{sr}".format(sr=subreddit))
 		self.reddit = praw.Reddit(user_agent="MOBI downloader by %s" % username)
 		
 		self.subreddit = subreddit
 		self.count = count
-		self.commentcount = 5
+		self.commentcount = commentcount
 		self.username = username
 		
+		assert count > 0
+		assert commentcount >= 0
+		
 	def gather(self):
-		self.addHeading("/r/%s" % self.subreddit)
+		self.addHeading(self.subreddit)
+		
 		nowStr = datetime.now().strftime("%B %d, %Y, %H:%M")
-		self.html.addHtml("<small>(compiled by /u/{user} on {date})</small>".format(user=self.html.escape(self.username), date=self.html.escape(nowStr)))
-		self.html.addHtml("<br/>")
-		self.addImage(REDDIT_LOGO, width=0.8)
+		self.addAuthoringInfo(author=self.username, date=datetime.now(), verb="compiled")
+		self.addImage(REDDIT_LOGO, width=0.5)
 		
 		submissions = self.reddit.get_subreddit(self.subreddit).get_hot(limit=self.count)
 		for i, submission in enumerate(submissions):
 			self.addPagebreak()
 			self.addHeading(submission.title, 2)
-			self.html.addHtml(r'<small>(score: {score}, submitted by /u/{user})</small>'.format(score=self.html.escape(submission.score), user=self.html.escape(submission.author.name)))
+			self.addAuthoringInfo(author="{author} ({score})".format(author=submission.author.name, score=submission.score), date=datetime.fromtimestamp(submission.created), verb="submitted")
 			
 			if submission.is_self:
 				if submission.selftext_html is not None:
@@ -42,11 +45,12 @@ class RedditSubredditBook(Book):
 				else:
 					self.html.addHtml(r'<p><a href="{url}">{url}</a></p>'.format(url=self.html.escape(submission.url)))
 
-			self.addHeading("Comments", 3)
-			for comment in submission.comments[:self.commentcount]:
-				if not isinstance(comment, praw.objects.MoreComments):
-					self.html.addHtml(r'<blockquote>{body}<footer>- {user} ({score})</footer></blockquote>'.format(user=self.html.escape(comment.author.name), score=self.html.escape(comment.score), body=comment.body))
-				
-				
+			if self.commentcount > 0:
+				self.addHeading("Comments", 3)
+				for comment in submission.comments[:self.commentcount]:
+					if not isinstance(comment, praw.objects.MoreComments):
+						self.html.addHtml(r'<blockquote>{body}<footer>- {user} ({score})</footer></blockquote>'.format(user=self.html.escape(comment.author.name), score=comment.score, body=comment.body))
+					
+					
 				
 				

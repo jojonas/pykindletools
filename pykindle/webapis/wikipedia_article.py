@@ -5,9 +5,10 @@ import wikipedia
 class WikipediaArticleBook(Book):
 	def __init__(self, title):
 		Book.__init__(self, u"Wikipedia: {title}".format(title=title))
-		self.page = wikipedia.page(title)
+		self.search_term = title
 		
 	def gather(self):
+		self.page = wikipedia.page(self.search_term)
 		self.addHeading(self.page.title)
 		
 		content = self.page.content
@@ -22,3 +23,6 @@ class WikipediaArticleBook(Book):
 			else:
 				self.addParagraph(line)
 			
+	def setLanguage(self, lang):
+		wikipedia.set_lang(lang)
+		

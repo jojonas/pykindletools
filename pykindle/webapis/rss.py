@@ -2,6 +2,7 @@ from pykindle.htmlgenerator import Book
 
 import urllib2
 import xml.etree.ElementTree
+from datetime import datetime
 
 class RSSBook(Book):
 	def __init__(self, url):
@@ -27,6 +28,13 @@ class RSSBook(Book):
 		self.addHeading(self.rss_title)
 		
 		try:
+			dateStr = self.etree.find("./pubDate").text
+			date = datetime.strptime(dateStr[:-6], '%a, %d %b %Y %H:%M:%S')
+			self.addAuthoringInfo(date=date, verb="published")
+		except AttributeError:
+			pass
+		
+		try:
 			image = self.etree.find("./image/url").text
 			self.addImage(image)
 		except AttributeError:
@@ -39,9 +47,7 @@ class RSSBook(Book):
 			
 			self.addPagebreak()
 			self.addHeading(title, 2)
-			self.html.addHtml(u'<p>{desc}</p>'.format(desc=description.replace('&', '&amp;')))
+			self.html.addHtml(u'<div>{desc}</div>'.format(desc=description.replace('&', '&amp;')))
 			self.html.addHtml(u'<p><a href="{url}">link to article</a></p>'.format(url=self.html.escape(link)))
 			
-		#nowStr = datetime.now().strftime("%B %d, %Y, %H:%M")
-		
 				
