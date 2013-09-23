@@ -39,7 +39,14 @@ def make_argparser(BookClass):
 	
 		arginfos.append(arginfo)
 		
-	parser = argparse.ArgumentParser(description=doclines[0])
+	help = ''
+	for docline in doclines:
+		if docline.strip() == '':
+			break
+		else:
+			help += docline + " "
+		
+	parser = argparse.ArgumentParser(description=help)
 	for arginfo in arginfos:
 		name = arginfo['name']
 		del arginfo['name']
