@@ -15,12 +15,22 @@ class HTMLFile(File):
 	def __init__(self, title):
 		File.__init__(self, title, 'html')
 		
-		self.document = xml.dom.minidom.Document()
-		self._declLength = len(self.document.toxml())
-		self.html = self.document.createElement('html')
+		impl = xml.dom.minidom.getDOMImplementation()
+		docType = impl.createDocumentType(
+			'html', 
+			'-//W3C//DTD XHTML 1.0 Transitional//EN', 
+			'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'
+		)
+		self.document = impl.createDocument(None, 'html', docType)
+		self.html = self.document.documentElement
+		
+		#hackish:
+		self._declLength = len(impl.createDocument(None, None, None).toxml("utf-8")) 
+		
+		
 		self.head = self.document.createElement('head')
 		self.body = self.document.createElement('body')
-		self.document.appendChild(self.html)
+		
 		self.html.appendChild(self.head)
 		self.html.appendChild(self.body)
 		
