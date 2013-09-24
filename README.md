@@ -20,7 +20,9 @@ Requirements
 ------------
 The project is (as of now) aimed at and tested with Python 2.7.5 and `kindlegen` on Windows, version 2.9.
 
-For the different web services listed above, there might be dependencies. Here is a list of their project sites:
+For the different web services listed above, there are dependencies. Not all of them have to be installed if you intend to only use a certain plugin.
+
+Here is a list of their project sites:
  * `evernote` - Evernote SDK for Python, https://github.com/evernote/evernote-sdk-python
  * `praw` - Python Reddit API Wrapper, https://github.com/praw-dev/praw
  * `wikipedia` - A Pythonic wrapper for the Wikipedia API, https://github.com/goldsmith/Wikipedia
