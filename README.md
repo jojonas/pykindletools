@@ -10,16 +10,18 @@ This project aims to provide a "preprocessor" for the `kindlegen` application, w
 
 Supported Web services
 ----------------------
+ * Evernote (https://evernote.com, via `evernote` module)
  * Reddit (http://www.reddit.com, via `praw` module)
  * RSS Feeds
  * Wikipedia (via `wikipedia` module)
- * Wordpress (XML-RPC)
+ * Wordpress (via XML-RPC)
 
 Requirements
 ------------
 The project is (as of now) aimed at and tested with Python 2.7.5 and `kindlegen` on Windows, version 2.9.
 
 For the different web services listed above, there might be dependencies. Here is a list of their project sites:
+ * `evernote` - Evernote SDK for Python, https://github.com/evernote/evernote-sdk-python
  * `praw` - Python Reddit API Wrapper, https://github.com/praw-dev/praw
  * `wikipedia` - A Pythonic wrapper for the Wikipedia API, https://github.com/goldsmith/Wikipedia
  
