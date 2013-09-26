@@ -27,10 +27,10 @@ def make_argparser(BookClass):
 			pattern = ":param {arg}:".format(arg=arg)
 			if line.startswith(pattern):
 				arginfo['help'] = line[len(pattern):]
-				line = doclines[j+1]
+				line = doclines[j+1].strip()
 				pattern = ":type"
 				if line.startswith(pattern):
-					arginfo['type'] = TYPES[line[len(pattern)].strip()]
+					arginfo['type'] = TYPES[line[len(pattern):].strip()]
 				break
 			
 		if i >= nrequired:
